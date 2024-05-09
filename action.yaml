@@ -11,24 +11,27 @@ runs:
       with:
         node-version-file: ".nvmrc"
 
+    - uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+        no-cache: true
+
     - name: 🔄 Restore node_modules cache
       id: node_modules-cache
       uses: actions/cache/restore@v4
       with:
-        key: node_modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+        key: node_modules-${{ runner.os }}-${{ hashFiles('bun.lockb') }}
         path: node_modules
 
     - name: ⬇️ install
       shell: "bash"
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
-      run: |
-        npm i -g npm@10
-        npm ci --ignore-scripts
+      run: bun install
 
     - name: 🔄 Save node_modules cache
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
       continue-on-error: true
       uses: actions/cache/save@v4
       with:
-        key: node_modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+        key: node_modules-${{ runner.os }}-${{ hashFiles('bun.lockb') }}
         path: node_modules
