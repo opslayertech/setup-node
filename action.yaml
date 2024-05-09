@@ -14,7 +14,6 @@ runs:
     - uses: oven-sh/setup-bun@v1
       with:
         bun-version: latest
-        no-cache: true
 
     - name: 🔄 Restore node_modules cache
       id: node_modules-cache
