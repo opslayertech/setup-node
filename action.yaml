@@ -19,18 +19,18 @@ runs:
       id: node_modules-cache
       uses: actions/cache/restore@v4
       with:
-        key: node_modules-${{ runner.os }}-${{ hashFiles('package.json') }}-${{ hashFiles('bun.lockb') }}-v2
+        key: node_modules-${{ runner.os }}-${{ hashFiles('package.json') }}-${{ hashFiles('bun.lockb') }}-v3
         path: ~/.bun/install/cache
 
     - name: ⬇ install
       shell: "bash"
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
-      run: bun install --frozen-lockfile
+      run: bun install --frozen-lockfile --ignore-scripts
 
     - name: 🔄 Save node_modules cache
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
       continue-on-error: true
       uses: actions/cache/save@v4
       with:
-        key: node_modules-${{ runner.os }}-${{ hashFiles('package.json') }}-${{ hashFiles('bun.lockb') }}-v2
+        key: node_modules-${{ runner.os }}-${{ hashFiles('package.json') }}-${{ hashFiles('bun.lockb') }}-v3
         path: ~/.bun/install/cache
