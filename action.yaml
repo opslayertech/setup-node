@@ -6,7 +6,7 @@ runs:
     - name: 🤘 checkout
       uses: actions/checkout@v4
 
-    - name: ⚙️ Setup Node.js environment
+    - name: ⚙ Setup Node.js environment
       uses: actions/setup-node@v4
       with:
         node-version-file: ".nvmrc"
@@ -20,12 +20,12 @@ runs:
       uses: actions/cache/restore@v4
       with:
         key: node_modules-${{ runner.os }}-${{ hashFiles('bun.lockb') }}
-        path: node_modules
+        path: ~/.bun/install/cache
 
-    - name: ⬇️ install
+    - name: ⬇ install
       shell: "bash"
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
-      run: bun install --frozen-lockfile
+      run: bun install --frozen-lockfile --ignore-scripts
 
     - name: 🔄 Save node_modules cache
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
@@ -33,4 +33,4 @@ runs:
       uses: actions/cache/save@v4
       with:
         key: node_modules-${{ runner.os }}-${{ hashFiles('bun.lockb') }}
-        path: node_modules
+        path: ~/.bun/install/cache
