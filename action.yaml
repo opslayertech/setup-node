@@ -19,7 +19,7 @@ runs:
       id: node_modules-cache
       uses: actions/cache/restore@v4
       with:
-        key: node_modules-${{ runner.os }}-${{ hashFiles('package.json') }}-${{ hashFiles('bun.lockb') }}
+        key: node_modules-${{ runner.os }}-${{ hashFiles('package.json') }}-${{ hashFiles('bun.lockb') }}-v1
         path: ~/.bun/install/cache
 
     - name: ⬇ install
@@ -32,5 +32,5 @@ runs:
       continue-on-error: true
       uses: actions/cache/save@v4
       with:
-        key: node_modules-${{ runner.os }}-${{ hashFiles('package.json') }}-${{ hashFiles('bun.lockb') }}
+        key: node_modules-${{ runner.os }}-${{ hashFiles('package.json') }}-${{ hashFiles('bun.lockb') }}-v1
         path: ~/.bun/install/cache
