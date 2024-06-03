@@ -25,7 +25,7 @@ runs:
     - name: ⬇ install
       shell: "bash"
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
-      run: bun install --frozen-lockfile --ignore-scripts
+      run: bun install --frozen-lockfile
 
     - name: 🔄 Save node_modules cache
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
