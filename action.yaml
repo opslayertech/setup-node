@@ -6,29 +6,14 @@ runs:
     - name: 🤘 checkout
       uses: actions/checkout@v4
 
-    - name: ⚙️ Setup Node.js environment
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+
+    - name: ⚙️  Setup Node.js environment
       uses: actions/setup-node@v4
       with:
         node-version-file: ".nvmrc"
+        cache: 'pnpm'
 
-    - name: 🔄 Restore node_modules cache
-      id: node_modules-cache
-      uses: actions/cache/restore@v4
-      with:
-        key: node_modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-        path: node_modules
-
-    - name: ⬇️ install
-      shell: "bash"
-      if: steps.node_modules-cache.outputs.cache-hit != 'true'
-      run: |
-        npm i -g npm@10
-        npm ci --ignore-scripts
-
-    - name: 🔄 Save node_modules cache
-      if: steps.node_modules-cache.outputs.cache-hit != 'true'
-      continue-on-error: true
-      uses: actions/cache/save@v4
-      with:
-        key: node_modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-        path: node_modules
+    - name: ⬇️  Install dependencies
+      run: pnpm install --ignore-scripts --frozen-lockfile
