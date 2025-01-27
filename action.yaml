@@ -23,7 +23,7 @@ runs:
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
       run: |
         npm i -g npm@10
-        npm ci --ignore-scripts
+        npm ci --ignore-scripts -include=dev
 
     - name: 🔄 Save node_modules cache
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
