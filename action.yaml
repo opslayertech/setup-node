@@ -18,12 +18,27 @@ runs:
         key: node_modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
         path: node_modules
 
+    - name: Install npm
+      shell: bash
+      run: |
+        # Safely extract the packageManager field (if it exists).
+        PACKAGE_MANAGER="$(node -p "require('./package.json').packageManager" 2>/dev/null || true)"
+
+        if [[ "$PACKAGE_MANAGER" =~ ^npm@ ]]; then
+          # Extract the npm version from something like "npm@11.0.0"
+          NPM_VERSION="$(echo "$PACKAGE_MANAGER" | cut -d '@' -f2)"
+          echo "Detected npm version from package.json: npm@$NPM_VERSION"
+          npm install -g "npm@$NPM_VERSION"
+        else
+          echo "No valid npm packageManager specified, installing latest npm..."
+          npm install -g npm@latest
+        fi    
+
     - name: ⬇️ install
       shell: "bash"
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
-      run: |
-        npm i -g npm@10
-        npm ci --ignore-scripts
+      run: | 
+        npm ci --ignore-scripts --include=dev
 
     - name: 🔄 Save node_modules cache
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
