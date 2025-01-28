@@ -22,7 +22,7 @@ runs:
       shell: bash
       run: |
         # Safely extract the packageManager field (if it exists).
-        PACKAGE_MANAGER="$(node -p "require('./package.json').packageManager" 2>/dev/null || true)"
+        PACKAGE_MANAGER="$(node -p "require('./package.json').packageManager" 2>/dev/null || '')"
 
         if [[ "$PACKAGE_MANAGER" =~ ^npm@ ]]; then
           # Extract the npm version from something like "npm@11.0.0"
