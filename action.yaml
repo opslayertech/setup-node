@@ -40,6 +40,9 @@ runs:
           npm install -g npm@latest
         fi    
 
+    - name: Display node/npm versions
+      run: node --version && npm --version  
+
     - name: ⬇️ install
       shell: "bash"
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
