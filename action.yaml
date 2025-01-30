@@ -26,7 +26,11 @@ runs:
         else
           echo "No valid npm packageManager specified, installing latest npm..."
           npm install -g npm@latest
-        fi      
+        fi
+
+    - name: Display node/npm versions
+      shell: bash
+      run: node --version && npm --version  
 
     - name: 🔄 Retrieve npm version
       id: get-npm-version
@@ -39,10 +43,6 @@ runs:
       with:
         path: node_modules
         key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-npm-${{ env.npm_version }}-${{ hashFiles('package-lock.json') }}   
-
-    - name: Display node/npm versions
-      shell: bash
-      run: node --version && npm --version  
 
     - name: ⬇️ install
       shell: "bash"
