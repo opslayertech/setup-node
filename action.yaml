@@ -54,5 +54,5 @@ runs:
       continue-on-error: true
       uses: actions/cache/save@v4
       with:
-        key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-${{ env.pnpm_version }}-${{ hashFiles('package-lock.json') }}
+        key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-${{ env.pnpm_version }}-${{ hashFiles('pnpm-lock.yaml') }}
         path: node_modules
