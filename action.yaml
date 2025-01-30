@@ -12,18 +12,6 @@ runs:
       with:
         node-version-file: ".nvmrc"
 
-    - name: 🔄 Retrieve npm version
-      id: get-npm-version
-      shell: bash
-      run: echo "npm_version=$(npm --version)" >> $GITHUB_ENV
-
-    - name: 🔄 Restore node_modules cache
-      id: node_modules-cache
-      uses: actions/cache@v4
-      with:
-        path: node_modules
-        key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-npm-${{ env.npm_version }}-${{ hashFiles('package-lock.json') }}
-
     - name: 📦 Install npm
       shell: bash
       run: |
@@ -38,15 +26,26 @@ runs:
         else
           echo "No valid npm packageManager specified, installing latest npm..."
           npm install -g npm@latest
-        fi    
+        fi
 
     - name: Display node/npm versions
       shell: bash
       run: node --version && npm --version  
 
+    - name: 🔄 Retrieve npm version
+      id: get-npm-version
+      shell: bash
+      run: echo "npm_version=$(npm --version)" >> $GITHUB_ENV
+
+    - name: 🔄 Restore node_modules cache
+      id: node_modules-cache
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-npm-${{ env.npm_version }}-${{ hashFiles('package-lock.json') }}   
+
     - name: ⬇️ install
       shell: "bash"
-      if: steps.node_modules-cache.outputs.cache-hit != 'true'
       run: | 
         npm ci --ignore-scripts --include=dev
 
@@ -55,5 +54,5 @@ runs:
       continue-on-error: true
       uses: actions/cache/save@v4
       with:
-        key: node_modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+        key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-npm-${{ env.npm_version }}-${{ hashFiles('package-lock.json') }}
         path: node_modules
