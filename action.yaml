@@ -22,10 +22,10 @@ runs:
           # Extract the pnpm version from something like "pnpm@11.0.0"
           PNPM_VERSION="$(echo "$PACKAGE_MANAGER" | cut -d '@' -f2)"
           echo "Detected pnpm version from package.json: pnpm@$PNPM_VERSION"
-          pnpm install -g "pnpm@$PNPM_VERSION"
+          npm install -g "pnpm@$PNPM_VERSION"
         else
           echo "No valid pnpm packageManager specified, installing latest pnpm..."
-          pnpm install -g pnpm@latest
+          npm install -g pnpm@latest
         fi    
 
     - name: 🔄 Retrieve current pnpm version
