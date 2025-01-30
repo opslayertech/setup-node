@@ -47,7 +47,6 @@ runs:
 
     - name: ⬇️ install
       shell: "bash"
-      if: steps.node_modules-cache.outputs.cache-hit != 'true'
       run: | 
         pnpm install --ignore-scripts --frozen-lockfile
 
