@@ -32,7 +32,7 @@ runs:
     - name: ⏬Install pnpm
       uses: pnpm/action-setup@v4
       with:
-        version: ${{ steps.pnpm_version.outputs.pnpm_version }} 
+        version: ${{ steps.pnpm_version.outputs.pnpm_version }}
 
     - name: Display node/pnpm versions
       shell: bash
@@ -45,7 +45,7 @@ runs:
         path: |
           node_modules
           ~/.pnpm-store
-        key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-${{ env.pnpm_version }}-${{ hashFiles('pnpm-lock.yaml') }}
+        key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-$(npm --version)-${{ hashFiles('pnpm-lock.yaml') }}
         restore-keys: |
           node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-
           node_modules-${{ runner.os }}-node-
@@ -62,4 +62,4 @@ runs:
         path: |
           node_modules
           ~/.pnpm-store
-        key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-${{ env.pnpm_version }}-${{ hashFiles('pnpm-lock.yaml') }}
+        key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-$(npm --version)-${{ hashFiles('pnpm-lock.yaml') }}
