@@ -12,7 +12,8 @@ runs:
       with:
         node-version-file: ".nvmrc"
 
-    - name: 📦 Install pnpm
+    - name: Getting pnpm version
+      id: pnpm_version
       shell: bash
       run: |
         # Safely extract the packageManager field (if it exists).
@@ -22,37 +23,43 @@ runs:
           # Extract the pnpm version from something like "pnpm@11.0.0"
           PNPM_VERSION="$(echo "$PACKAGE_MANAGER" | cut -d '@' -f2)"
           echo "Detected pnpm version from package.json: pnpm@$PNPM_VERSION"
-          npm install -g "pnpm@$PNPM_VERSION"
+          echo "pnpm_version='$PNPM_VERSION'" >> $GITHUB_OUTPUT
         else
-          echo "No valid pnpm packageManager specified, installing latest pnpm..."
-          npm install -g pnpm@latest
-        fi    
+          echo "No valid pnpm version specified in packageManager, using latest pnpm..."
+          echo "pnpm_version='latest'" >> $GITHUB_OUTPUT
+        fi
 
-    - name: 🔄 Retrieve current pnpm version
-      id: get-pnpm-version
-      shell: bash
-      run: echo "pnpm_version=$(pnpm --version)" >> $GITHUB_ENV
-
-    - name: 🔄 Restore node_modules cache
-      id: node_modules-cache
-      uses: actions/cache@v4
+    - name: ⏬Install pnpm
+      uses: pnpm/action-setup@v4
       with:
-        path: node_modules
-        key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-${{ env.pnpm_version }}-${{ hashFiles('pnpm-lock.yaml') }}
+        version: ${{ steps.pnpm_version.outputs.pnpm_version }} 
 
     - name: Display node/pnpm versions
       shell: bash
       run: node --version && pnpm --version  
 
-    - name: ⬇️ install
+    - name: 🔄 Restore node_modules cache
+      id: node_modules-cache
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          node_modules
+          ~/.pnpm-store
+        key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-${{ env.pnpm_version }}-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: |
+          node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-
+          node_modules-${{ runner.os }}-node-
+
+    - name: ⬇️  Install
       shell: "bash"
       run: | 
         pnpm install --ignore-scripts --frozen-lockfile
 
     - name: 🔄 Save node_modules cache
-      if: steps.node_modules-cache.outputs.cache-hit != 'true'
       continue-on-error: true
       uses: actions/cache/save@v4
       with:
+        path: |
+          node_modules
+          ~/.pnpm-store
         key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-${{ env.pnpm_version }}-${{ hashFiles('pnpm-lock.yaml') }}
-        path: node_modules
