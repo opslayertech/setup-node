@@ -23,9 +23,9 @@ runs:
       run: |
         node --version
         pnpm --version  
-        echo "pnpm_version='$(pnpm -v)'" >> $GITHUB_OUTPUT
+        echo "pnpm_version=$(pnpm -v)" >> $GITHUB_OUTPUT
 
-    - name: 🔄 Restore node_modules cache
+    - name: 🔄 Restore node_modules and pnpm store from cache
       id: node_modules-cache
       uses: actions/cache/restore@v4
       with:
@@ -42,7 +42,7 @@ runs:
       run: | 
         pnpm install --ignore-scripts --frozen-lockfile
 
-    - name: 🔄 Save node_modules cache
+    - name: 🔄 Save node_modules and pnpm store to cache
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
       continue-on-error: true
       uses: actions/cache/save@v4
