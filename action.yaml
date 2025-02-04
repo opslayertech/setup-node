@@ -12,27 +12,8 @@ runs:
       with:
         node-version-file: ".nvmrc"
 
-    - name: Getting pnpm version
-      id: pnpm_version
-      shell: bash
-      run: |
-        # Safely extract the packageManager field (if it exists).
-        PACKAGE_MANAGER="$(node -p "require('./package.json').packageManager" 2>/dev/null || '')"
-
-        if [[ "$PACKAGE_MANAGER" =~ ^pnpm@ ]]; then
-          # Extract the pnpm version from something like "pnpm@11.0.0"
-          PNPM_VERSION="$(echo "$PACKAGE_MANAGER" | cut -d '@' -f2)"
-          echo "Detected pnpm version from package.json: pnpm@$PNPM_VERSION"
-          echo "pnpm_version='$PNPM_VERSION'" >> $GITHUB_OUTPUT
-        else
-          echo "No valid pnpm version specified in packageManager, using latest pnpm..."
-          echo "pnpm_version='latest'" >> $GITHUB_OUTPUT
-        fi
-
     - name: ⬇️  Install pnpm
       uses: pnpm/action-setup@v4
-      with:
-        version: ${{ steps.pnpm_version.outputs.pnpm_version }}
 
     - name: Display node/pnpm versions
       shell: bash
