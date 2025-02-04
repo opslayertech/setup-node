@@ -17,7 +17,10 @@ runs:
 
     - name: Display node/pnpm versions
       shell: bash
-      run: node --version && pnpm --version  
+      run: |
+        node --version
+        pnpm --version  
+        echo "pnpm_version=$(pnpm --version)" >> $GITHUB_ENV
 
     - name: 🔄 Restore node_modules cache
       id: node_modules-cache
@@ -26,9 +29,9 @@ runs:
         path: |
           node_modules
           ~/.pnpm-store
-        key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-$(npm --version)-${{ hashFiles('pnpm-lock.yaml') }}
+        key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-${{ env.npm_version }}-${{ hashFiles('pnpm-lock.yaml') }}
         restore-keys: |
-          node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-
+          node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-
           node_modules-${{ runner.os }}-node-
 
     - name: ⬇️  Install
@@ -44,4 +47,4 @@ runs:
         path: |
           node_modules
           ~/.pnpm-store
-        key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-$(npm --version)-${{ hashFiles('pnpm-lock.yaml') }}
+        key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-${{ env.npm_version }}-${{ hashFiles('pnpm-lock.yaml') }}
