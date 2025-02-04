@@ -24,6 +24,7 @@ runs:
         node --version
         pnpm --version  
         echo "pnpm_version=$(pnpm -v)" >> $GITHUB_OUTPUT
+        echo "pnpm_store=$(pnpm store path)" >> $GITHUB_OUTPUT
 
     - name: 🔄 Restore node_modules and pnpm store from cache
       id: node_modules-cache
@@ -31,7 +32,7 @@ runs:
       with:
         path: |
           node_modules
-          ~/.pnpm-store
+          ${{ steps.pnpm_version.outputs.pnpm_store }}
         key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-${{ steps.pnpm_version.outputs.pnpm_version }}-${{ hashFiles('pnpm-lock.yaml') }}
         restore-keys: |
           node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-
@@ -49,5 +50,5 @@ runs:
       with:
         path: |
           node_modules
-          ~/.pnpm-store
+          ${{ steps.pnpm_version.outputs.pnpm_store }}
         key: node_modules-${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-pnpm-${{ steps.pnpm_version.outputs.pnpm_version }}-${{ hashFiles('pnpm-lock.yaml') }}
