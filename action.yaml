@@ -14,6 +14,8 @@ runs:
 
     - name: ⬇️  Install pnpm
       uses: pnpm/action-setup@v4
+      with:
+          run_install: false
 
     - name: Display node/pnpm versions
       shell: bash
