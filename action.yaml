@@ -8,7 +8,7 @@ runs:
 
     - name: ⚙️  Setup Node.js environment
       id: setup-node
-      uses: actions/setup-node@v4
+      uses: useblacksmith/setup-node@v5
       with:
         node-version-file: ".nvmrc"
 
@@ -28,7 +28,7 @@ runs:
 
     - name: 🔄 Restore node_modules and pnpm store from cache
       id: node_modules-cache
-      uses: actions/cache/restore@v4
+      uses: useblacksmith/cache/restore@v5
       with:
         path: |
           node_modules
@@ -46,7 +46,7 @@ runs:
     - name: 🔄 Save node_modules and pnpm store to cache
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
       continue-on-error: true
-      uses: actions/cache/save@v4
+      uses: useblacksmith/cache/save@v5
       with:
         path: |
           node_modules
