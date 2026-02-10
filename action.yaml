@@ -41,7 +41,7 @@ runs:
     - name: ⬇️  Install
       shell: "bash"
       run: | 
-        pnpm install --ignore-scripts --frozen-lockfile --os=linux --cpu=x64
+        pnpm install --frozen-lockfile --os=linux --cpu=x64
 
     - name: 🔄 Save node_modules and pnpm store to cache
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
