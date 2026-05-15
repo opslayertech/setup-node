@@ -13,9 +13,9 @@ runs:
         node-version-file: ".nvmrc"
 
     - name: ⬇️  Install pnpm
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v6
       with:
-          run_install: false
+        run_install: false
 
     - name: Display node/pnpm versions
       id: pnpm_version
@@ -28,7 +28,7 @@ runs:
 
     - name: 🔄 Restore node_modules and pnpm store from cache
       id: node_modules-cache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: |
           node_modules
@@ -46,7 +46,7 @@ runs:
     - name: 🔄 Save node_modules and pnpm store to cache
       if: steps.node_modules-cache.outputs.cache-hit != 'true'
       continue-on-error: true
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: |
           node_modules
